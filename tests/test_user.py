@@ -82,14 +82,14 @@ def test_delete_user():
 
     response = client.delete(
         "/api/v1/user",
-        params={"email": user_to_creatre["email"]}
+        params={"email": user_to_create["email"]}
     )
 
     assert response.status_code in (200, 204)
 
     get_response = client.get(
         "/api/v1/user",
-        params={"email": user_to_creatre["email"]}
+        params={"email": user_to_create["email"]}
     )
 
     assert get_response.status_code == 404
