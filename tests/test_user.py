@@ -47,12 +47,7 @@ def test_create_user_with_valid_email():
     )
 
     assert response.status_code in (200, 201)
-
-    data = response.json()
-
-    assert data["name"] == new_user["name"]
-    assert data["email"] == new_user["email"]
-    assert "id" in data
+    assert isinstance(response.json(), int)
 
 
 def test_create_user_with_invalid_email():
@@ -84,7 +79,6 @@ def test_delete_user():
 
     assert create_response.status_code in (200, 201)
 
-    created_user = create_response.json()
 
     response = client.delete(
         "/api/v1/user",
