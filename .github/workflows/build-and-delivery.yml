@@ -2,15 +2,16 @@ name: Build and Delivery
 
 on:
   workflow_run:
-    workflows: ["Test Python App"]
+    workflows: ["Test Python Apps"]
     types:
       - completed
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   cd:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -20,11 +21,12 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          context: .
           push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/my-app:latest
+          tags: starodubtsevbvt2352/lab5:latest
